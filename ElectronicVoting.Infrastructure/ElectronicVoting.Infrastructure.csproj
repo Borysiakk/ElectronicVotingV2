@@ -10,10 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Hosted" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\ElectronicVoting.Common\ElectronicVoting.Common.csproj" />
       <ProjectReference Include="..\ElectronicVoting.Persistence\ElectronicVoting.Persistence.csproj" />
     </ItemGroup>

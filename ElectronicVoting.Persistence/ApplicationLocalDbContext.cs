@@ -1,6 +1,7 @@
 ﻿
 using ElectronicVoting.Common.Model.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace ElectronicVoting.Persistence
 {
@@ -17,6 +18,15 @@ namespace ElectronicVoting.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuider)
         {
             base.OnModelCreating(modelBuider);
+        }
+    }
+    
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ApplicationLocalDbContext>
+    {
+        public ApplicationLocalDbContext CreateDbContext(string[] args)
+        {
+            var builder = new DbContextOptionsBuilder<ApplicationLocalDbContext>().UseSqlite("Data Source=LocalDb.db");
+            return new ApplicationLocalDbContext(builder.Options);
         }
     }
 }

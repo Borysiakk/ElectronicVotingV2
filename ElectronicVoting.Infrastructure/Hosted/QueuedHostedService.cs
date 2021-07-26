@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ElectronicVoting.Common.Interface;
 
-namespace ElectronicVoting.Infrastructure.Background
+namespace ElectronicVoting.Infrastructure.Hosted
 {
     public class QueuedHostedService :BackgroundService  
     {

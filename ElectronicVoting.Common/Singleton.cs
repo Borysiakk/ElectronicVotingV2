@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ElectronicVoting.API
+namespace ElectronicVoting.Common
 {
     public class Singleton<T>
     {

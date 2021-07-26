@@ -1,7 +1,7 @@
 ﻿using RestSharp;
 using Newtonsoft.Json;
-using ElectronicVoting.API;
 using System.Threading.Tasks;
+using ElectronicVoting.Common;
 using RestSharp.Authenticators;
 using ElectronicVoting.Common.Interface.Helper;
 

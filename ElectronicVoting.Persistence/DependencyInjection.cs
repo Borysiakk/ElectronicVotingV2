@@ -11,5 +11,6 @@ namespace ElectronicVoting.Persistence
             services.AddDbContext<ApplicationLocalDbContext>(options => options.UseSqlite("Data Source=LocalDb.db"));
             return services;
         }
+        
     }
 }
