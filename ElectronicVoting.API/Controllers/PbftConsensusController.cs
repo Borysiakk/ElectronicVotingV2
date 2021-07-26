@@ -1,7 +1,7 @@
-﻿using System;
+﻿
 using System.Threading.Tasks;
-using ElectronicVoting.API.Consensus;
-using ElectronicVoting.API.Interface;
+using ElectronicVoting.Common.Interface;
+using ElectronicVoting.Common.Model.Blockchain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 

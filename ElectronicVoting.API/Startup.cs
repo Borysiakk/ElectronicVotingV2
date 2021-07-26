@@ -1,9 +1,7 @@
-using ElectronicVoting.API.Background;
-using ElectronicVoting.API.Interface;
-using ElectronicVoting.API.Services;
+using ElectronicVoting.Infrastructure;
+using ElectronicVoting.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,19 +23,13 @@ namespace ElectronicVoting.API
         {
             
             services.AddControllers();
-            services.AddDbContext<ApplicationLocalDbContext>(options => options.UseSqlite("Data Source=LocalDb.db"));
-            
+            services.AddPersistence();
+            services.AddInfrastructure();
             
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "ElectronicVoting.API", Version = "v1"});
             });
-            
-            services.AddHostedService<QueuedHostedService>();  
-            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>(); 
-            
-            services.AddScoped<ITransactionService,TransactionService>();
-            services.AddScoped<IPbftConsensusService,PbftConsensusService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

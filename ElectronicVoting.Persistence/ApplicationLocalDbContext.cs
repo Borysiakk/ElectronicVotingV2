@@ -1,12 +1,13 @@
-﻿using ElectronicVoting.API.Model.Entities;
+﻿
+using ElectronicVoting.Common.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ElectronicVoting.API
+namespace ElectronicVoting.Persistence
 {
     public class ApplicationLocalDbContext :DbContext
     {
         public DbSet<ValidatorEntities> Validators { get; set; }
-        public DbSet<TransactionEntities> TransactionsHistory { get; set; }
+        public DbSet<InitialTransactionEntities> InitialTransactions { get; set; }
 
         public ApplicationLocalDbContext(DbContextOptions<ApplicationLocalDbContext> options) : base(options)
         {

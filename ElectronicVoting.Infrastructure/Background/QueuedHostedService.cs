@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ElectronicVoting.API.Interface;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ElectronicVoting.Common.Interface;
 
-namespace ElectronicVoting.API.Background
+namespace ElectronicVoting.Infrastructure.Background
 {
     public class QueuedHostedService :BackgroundService  
     {

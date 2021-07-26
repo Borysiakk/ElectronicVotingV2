@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ElectronicVoting.API.Consensus;
 using Microsoft.AspNetCore.Http;
+using ElectronicVoting.Common.Model.Blockchain;
 
-namespace ElectronicVoting.API.Interface
+namespace ElectronicVoting.Common.Interface
 {
     public interface IPbftConsensusService
     {

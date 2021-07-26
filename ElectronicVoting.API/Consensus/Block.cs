@@ -1,4 +1,6 @@
-﻿namespace ElectronicVoting.API.Consensus
+﻿using ElectronicVoting.Common.Model.Blockchain;
+    
+namespace ElectronicVoting.API.Consensus
 {
     public class Block
     {

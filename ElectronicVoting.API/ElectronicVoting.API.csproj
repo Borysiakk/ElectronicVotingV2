@@ -23,5 +23,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ElectronicVoting.Common\ElectronicVoting.Common.csproj" />
+      <ProjectReference Include="..\ElectronicVoting.Infrastructure\ElectronicVoting.Infrastructure.csproj" />
+      <ProjectReference Include="..\ElectronicVoting.Persistence\ElectronicVoting.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Http" />
+      <Folder Include="Interface" />
     </ItemGroup>
 </Project>

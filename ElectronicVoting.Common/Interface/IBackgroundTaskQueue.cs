@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ElectronicVoting.API.Interface
+namespace ElectronicVoting.Common.Interface
 {
     public interface IBackgroundTaskQueue
     {

@@ -2,7 +2,7 @@
 using RestSharp;
 using RestSharp.Authenticators;
 
-namespace ElectronicVoting.API.Http
+namespace ElectronicVoting.Common.Interface.Helper
 {
     public interface IHttpHelper
     {

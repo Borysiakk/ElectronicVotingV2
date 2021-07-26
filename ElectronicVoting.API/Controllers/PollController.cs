@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ElectronicVoting.API.Consensus;
-using ElectronicVoting.API.Http;
+using ElectronicVoting.Common;
+using ElectronicVoting.Common.Model.Blockchain;
+using ElectronicVoting.Infrastructure.Helper;
+using ElectronicVoting.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 
@@ -30,7 +32,7 @@ namespace ElectronicVoting.API.Controllers
                     Id = Guid.NewGuid().ToString(),
                     Transaction = new Transaction()
                     {
-                        Value = value,
+                        Voice = value,
                         From = port.ToString(),
                         Id = Guid.NewGuid().ToString(),
                     },
@@ -41,7 +43,7 @@ namespace ElectronicVoting.API.Controllers
                     if (validator.Port != port.ToString())
                     {
                         var url = validator.Address + ":" + validator.Port;
-                        var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.ValidatorApi.PrePreparing, null, voice);
+                        var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.PrePreparing, null, voice);
                     }
                 }
                 return Ok();

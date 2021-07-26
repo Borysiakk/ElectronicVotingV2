@@ -2,14 +2,14 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ElectronicVoting.API.Consensus;
-using ElectronicVoting.API.Http;
-using ElectronicVoting.API.Interface;
+using ElectronicVoting.Common;
+using ElectronicVoting.Common.Interface;
+using ElectronicVoting.Common.Model.Blockchain;
+using ElectronicVoting.Infrastructure.Helper;
+using ElectronicVoting.Persistence;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace ElectronicVoting.API.Services
+namespace ElectronicVoting.Infrastructure.Services
 {
     public class PbftConsensusService :IPbftConsensusService
     {
@@ -33,7 +33,7 @@ namespace ElectronicVoting.API.Services
                     if (validator.Port != port)
                     {
                         var url = validator.Address + ":" + validator.Port;
-                        var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.ValidatorApi.Preparing, null, messageTransaction);
+                        var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.Preparing, null, messageTransaction);
                     }
                 }   
             }
@@ -43,16 +43,7 @@ namespace ElectronicVoting.API.Services
         {
             var port = httpContext.Connection.LocalPort.ToString();
             var resultValidation = await ProofOfKnowledge.Validation(messageTransaction,token);
-
-            var transactionEntitiesEnumerable = await _localDbContext.TransactionsHistory.FirstOrDefaultAsync(a => a.Id == messageTransaction.Transaction.Id, cancellationToken: token);
-            if (transactionEntitiesEnumerable != null)
-            {
-                
-            }
-            else
-            {
-                
-            }
+            
 
             Console.WriteLine("Preparing");
         }

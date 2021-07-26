@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ElectronicVoting.API.Model.Entities
+namespace ElectronicVoting.Common.Model.Entities
 {
     [Table("Validators")]
     public class ValidatorEntities

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using ElectronicVoting.Common.Model.Blockchain;
 
-namespace ElectronicVoting.API.Consensus
+namespace ElectronicVoting.Infrastructure
 {
     public static class ProofOfKnowledge
     {

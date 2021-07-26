@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
-using ElectronicVoting.API.Interface;
+using System.Collections.Concurrent;
+using ElectronicVoting.Common.Interface;
 
-namespace ElectronicVoting.API.Background
+namespace ElectronicVoting.Infrastructure.Background
 {
     public class BackgroundTaskQueue :IBackgroundTaskQueue
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace ElectronicVoting.API.Consensus
+namespace ElectronicVoting.Common.Model.Blockchain
 {
     public class MessageTransaction
     {

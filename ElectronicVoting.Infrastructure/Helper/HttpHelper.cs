@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using RestSharp;
 using Newtonsoft.Json;
-using RestSharp;
+using ElectronicVoting.API;
+using System.Threading.Tasks;
 using RestSharp.Authenticators;
+using ElectronicVoting.Common.Interface.Helper;
 
-namespace ElectronicVoting.API.Http
+namespace ElectronicVoting.Infrastructure.Helper
 {
     public class HttpHelper :Singleton<HttpHelper>,IHttpHelper
     {
