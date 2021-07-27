@@ -8,8 +8,8 @@ namespace ElectronicVoting.Persistence
     public class ApplicationLocalDbContext :DbContext
     {
         public DbSet<ValidatorEntities> Validators { get; set; }
-        public DbSet<InitialTransactionEntities> InitialTransactions { get; set; }
-
+        public DbSet<TransactionEntities> Transactions { get; set; }
+        public DbSet<ElectionSettingsEntities> ElectionSettings { get; set; }
         public ApplicationLocalDbContext(DbContextOptions<ApplicationLocalDbContext> options) : base(options)
         {
             

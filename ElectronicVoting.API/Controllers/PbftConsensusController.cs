@@ -51,7 +51,7 @@ namespace ElectronicVoting.API.Controllers
         }
         
         [HttpPost("Commit")]
-        public async Task<IActionResult> Commit()
+        public async Task<IActionResult> Commit(MessageVerificationVote messageVerificationVote)
         {
             return Ok("Commit");
         }

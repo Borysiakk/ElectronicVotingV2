@@ -15,28 +15,26 @@ namespace ElectronicVoting.Infrastructure.Services
     public class PbftConsensusService :IPbftConsensusService
     {
         private readonly IRepositoryEntities<ValidatorEntities> _repositoryValidator;
-        private readonly IRepositoryEntities<InitialTransactionEntities> _repositoryInitialTransaction;
-        public PbftConsensusService( IRepositoryEntities<InitialTransactionEntities> repositoryInitialTransaction,ApplicationLocalDbContext localDbContext, IRepositoryEntities<ValidatorEntities> repositoryValidator)
+        private readonly IRepositoryEntities<TransactionEntities> _repositoryTransaction;
+        private readonly IRepositoryEntities<ElectionSettingsEntities> _repositoryElectionSettings;
+
+        public PbftConsensusService(IRepositoryEntities<ValidatorEntities> repositoryValidator, IRepositoryEntities<TransactionEntities> repositoryTransaction, IRepositoryEntities<ElectionSettingsEntities> repositoryElectionSettings)
         {
-            _repositoryInitialTransaction = repositoryInitialTransaction;
             _repositoryValidator = repositoryValidator;
+            _repositoryTransaction = repositoryTransaction;
+            _repositoryElectionSettings = repositoryElectionSettings;
         }
 
         public async Task PrePreparingAsync(HttpContext httpContext, MessageTransaction messageTransaction,CancellationToken token)
         {
             Console.WriteLine("PrePreparing");
             var port = httpContext.Connection.LocalPort.ToString();
-            var resultValidation = await ProofOfKnowledge.Validation(messageTransaction,token);
-            
-            if (resultValidation)
+            foreach (var validator in _repositoryValidator.GetAll())
             {
-                foreach (var validator in _repositoryValidator.GetAll())
+                if (validator.Port != port)
                 {
-                    if (validator.Port != port)
-                    {
-                        var url = validator.Address + ":" + validator.Port;
-                        var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.Preparing, null, messageTransaction);
-                    }
+                    var url = validator.Address + ":" + validator.Port;
+                    var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.Preparing, null, messageTransaction);
                 }
             }
         }
@@ -45,23 +43,41 @@ namespace ElectronicVoting.Infrastructure.Services
         {
             var port = httpContext.Connection.LocalPort.ToString();
             var resultValidation = await ProofOfKnowledge.Validation(messageTransaction,token);
-            var isInitialTransaction = await _repositoryInitialTransaction.FindAsync(messageTransaction.Id);
 
-            if (isInitialTransaction != null)
+            if (resultValidation)
             {
-                
-            }
-            else
-            {
-                InitialTransactionEntities initialTransaction = new InitialTransactionEntities()
+                MessageVerificationVote messageVerificationVote = new MessageVerificationVote()
                 {
-                    Id = messageTransaction.Transaction.Id,
-                    Validator = messageTransaction.Transaction.From,
+                    IsVerificationVote = true,
+                    Id = Guid.NewGuid().ToString(),
+                    TransactionId = messageTransaction.Transaction.Id,
                 };
-                await _repositoryInitialTransaction.AddAsync(initialTransaction);
-            }
 
+                foreach (var validator in _repositoryValidator.GetAll())
+                {
+                    if (port != validator.Port)
+                    {
+                        var url = validator.Address + ":" + validator.Port;
+                        var result = await HttpHelper.Instance.PostAsync<MessageVerificationVote>(url, Routes.PbftConsensusRoutesApi.Commit, null, messageVerificationVote);
+                    }
+                }
+            }
             Console.WriteLine("Preparing");
+        }
+
+        public async Task CommitAsync(HttpContext httpContext, MessageVerificationVote messageVerificationVote, CancellationToken token)
+        {
+            var countVerificationServer = (await _repositoryElectionSettings.FindAsync("1")).VerificationServerCount;
+            TransactionEntities transactionEntities = new TransactionEntities()
+            {
+                Id = new Guid().ToString(),
+                From = messageVerificationVote.From,
+                TransactionId = messageVerificationVote.TransactionId,
+            };
+            await _repositoryTransaction.AddAsync(transactionEntities);
+            
+            
+            Console.WriteLine("CommitAsync");
         }
     }
 }

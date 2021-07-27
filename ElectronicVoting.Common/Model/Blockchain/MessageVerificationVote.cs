@@ -1,10 +1,10 @@
 ﻿namespace ElectronicVoting.Common.Model.Blockchain
 {
-    public class Transaction
+    public class MessageVerificationVote
     {
         public string Id { get; set; }
-        public string To { get; set; }
         public string From { get; set; }
-        public string Vote { get; set; }
+        public string TransactionId { get; set; }
+        public bool IsVerificationVote { get; set; }
     }
 }

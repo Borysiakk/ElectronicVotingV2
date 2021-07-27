@@ -9,5 +9,6 @@ namespace ElectronicVoting.Common.Interface
     {
         public Task PrePreparingAsync(HttpContext httpContext,MessageTransaction messageTransaction,CancellationToken token);
         public Task PreparingAsync(HttpContext httpContext,MessageTransaction messageTransaction,CancellationToken token);
+        public Task CommitAsync(HttpContext httpContext, MessageVerificationVote messageVerificationVote, CancellationToken token);
     }
 }

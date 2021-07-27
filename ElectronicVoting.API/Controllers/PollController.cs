@@ -32,7 +32,7 @@ namespace ElectronicVoting.API.Controllers
                     Id = Guid.NewGuid().ToString(),
                     Transaction = new Transaction()
                     {
-                        Voice = value,
+                        Vote = value,
                         From = port.ToString(),
                         Id = Guid.NewGuid().ToString(),
                     },

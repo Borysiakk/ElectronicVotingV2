@@ -14,11 +14,11 @@ namespace ElectronicVoting.Infrastructure
         {
             services.AddHostedService<QueuedHostedService>();  
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+            
             services.AddScoped<IPbftConsensusService,PbftConsensusService>();
-            
             services.AddScoped<IRepositoryEntities<ValidatorEntities>,RepositoryEntities<ValidatorEntities>>();
-            services.AddScoped<IRepositoryEntities<InitialTransactionEntities>,RepositoryEntities<InitialTransactionEntities>>();
-            
+            services.AddScoped<IRepositoryEntities<TransactionEntities>, RepositoryEntities<TransactionEntities>>();
+            services.AddScoped<IRepositoryEntities<ElectionSettingsEntities>, RepositoryEntities<ElectionSettingsEntities>>();
             return services;
         }
     }
