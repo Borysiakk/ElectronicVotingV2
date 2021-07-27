@@ -53,6 +53,13 @@ namespace ElectronicVoting.API.Controllers
         [HttpPost("Commit")]
         public async Task<IActionResult> Commit(MessageVerificationVote messageVerificationVote)
         {
+            _queue.QueueBackgroundWorkItem(async token =>
+            {
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    await _pbftConsensusService.CommitAsync(HttpContext,messageVerificationVote,token);   
+                }
+            });
             return Ok("Commit");
         }
         

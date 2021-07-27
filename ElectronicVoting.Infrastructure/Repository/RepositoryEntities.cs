@@ -1,9 +1,12 @@
 ﻿
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using ElectronicVoting.Persistence;
 using ElectronicVoting.Common.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ElectronicVoting.Infrastructure.Repository
 {
@@ -26,6 +29,7 @@ namespace ElectronicVoting.Infrastructure.Repository
         public async Task<TA> FindAsync(string key)
         {
             var item = await _localDbContext.Set<TA>().FindAsync(key);
+            
             return item;
         }
 
@@ -56,9 +60,11 @@ namespace ElectronicVoting.Infrastructure.Repository
             return entities;
         }
 
-        public IEnumerable<TA> GetAll()
+        public async Task<IEnumerable<TA>> GetAllAsync() => await _localDbContext.Set<TA>().ToListAsync();
+
+        public async Task<IEnumerable<TA>> WhereAsync(Expression<Func<TA, bool>> expression)
         {
-           return _localDbContext.Set<TA>().ToList();
+            return await _localDbContext.Set<TA>().Where(expression).ToListAsync();
         }
     }
-}
+} 

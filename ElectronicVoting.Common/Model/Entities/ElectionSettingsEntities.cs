@@ -3,6 +3,6 @@
     public class ElectionSettingsEntities
     {
         public string Id { get; set; }
-        public string VerificationServerCount { get; set; } 
+        public int VerificationServerCount { get; set; } 
     }
 }

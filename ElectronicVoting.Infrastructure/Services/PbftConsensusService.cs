@@ -29,7 +29,7 @@ namespace ElectronicVoting.Infrastructure.Services
         {
             Console.WriteLine("PrePreparing");
             var port = httpContext.Connection.LocalPort.ToString();
-            foreach (var validator in _repositoryValidator.GetAll())
+            foreach (var validator in await _repositoryValidator.GetAllAsync())
             {
                 if (validator.Port != port)
                 {
@@ -53,7 +53,7 @@ namespace ElectronicVoting.Infrastructure.Services
                     TransactionId = messageTransaction.Transaction.Id,
                 };
 
-                foreach (var validator in _repositoryValidator.GetAll())
+                foreach (var validator in await _repositoryValidator.GetAllAsync())
                 {
                     if (port != validator.Port)
                     {
@@ -67,7 +67,7 @@ namespace ElectronicVoting.Infrastructure.Services
 
         public async Task CommitAsync(HttpContext httpContext, MessageVerificationVote messageVerificationVote, CancellationToken token)
         {
-            var countVerificationServer = (await _repositoryElectionSettings.FindAsync("1")).VerificationServerCount;
+            var countVerificationServer = (await _repositoryElectionSettings.FindAsync("0")).VerificationServerCount;
             TransactionEntities transactionEntities = new TransactionEntities()
             {
                 Id = new Guid().ToString(),
@@ -75,8 +75,14 @@ namespace ElectronicVoting.Infrastructure.Services
                 TransactionId = messageVerificationVote.TransactionId,
             };
             await _repositoryTransaction.AddAsync(transactionEntities);
-            
-            
+            var transactionsCount = (await _repositoryTransaction.WhereAsync(a => a.TransactionId == transactionEntities.TransactionId)).Count();
+            int expression = (countVerificationServer * 2) / 3;
+
+            if (expression >= transactionsCount)
+            {
+                //var result = await HttpHelper.Instance.PostAsync<MessageVerificationVote>(url, Routes.PbftConsensusRoutesApi.Commit, null, messageVerificationVote);
+            }
+
             Console.WriteLine("CommitAsync");
         }
     }
