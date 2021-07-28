@@ -23,13 +23,13 @@ namespace ElectronicVoting.API.Controllers
         }
 
         [HttpPost("PrePreparing")]
-        public async Task<IActionResult> PrePreparing(MessageTransaction messageTransaction )
+        public async Task<IActionResult> PrePreparing(MessageVote messageVote)
         {
             _queue.QueueBackgroundWorkItem(async token =>
             {
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                    await _pbftConsensusService.PrePreparingAsync(HttpContext,messageTransaction,token);
+                    await _pbftConsensusService.PrePreparingAsync(HttpContext,messageVote,token);
                 }
             });
             

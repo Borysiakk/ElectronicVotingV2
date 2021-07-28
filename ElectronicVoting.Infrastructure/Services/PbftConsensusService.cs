@@ -7,7 +7,6 @@ using ElectronicVoting.Common.Interface;
 using ElectronicVoting.Common.Model.Blockchain;
 using ElectronicVoting.Common.Model.Entities;
 using ElectronicVoting.Infrastructure.Helper;
-using ElectronicVoting.Persistence;
 using Microsoft.AspNetCore.Http;
 
 namespace ElectronicVoting.Infrastructure.Services
@@ -25,9 +24,20 @@ namespace ElectronicVoting.Infrastructure.Services
             _repositoryElectionSettings = repositoryElectionSettings;
         }
 
-        public async Task PrePreparingAsync(HttpContext httpContext, MessageTransaction messageTransaction,CancellationToken token)
+        public async Task PrePreparingAsync(HttpContext httpContext, MessageVote messageVote, CancellationToken token)
         {
             Console.WriteLine("PrePreparing");
+
+            MessageTransaction messageTransaction = new MessageTransaction()
+            {
+                Id = messageVote.Id,
+                Transaction = new Transaction()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    From = "http://localhost" + ":" + httpContext.Connection.LocalPort.ToString(),
+                }
+            };
+            
             var port = httpContext.Connection.LocalPort.ToString();
             foreach (var validator in await _repositoryValidator.GetAllAsync())
             {

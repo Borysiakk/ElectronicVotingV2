@@ -1,4 +1,5 @@
 ﻿using ElectronicVoting.Common.Interface;
+using ElectronicVoting.Common.Interface.Services;
 using ElectronicVoting.Common.Model.Entities;
 using ElectronicVoting.Infrastructure.Background;
 using ElectronicVoting.Infrastructure.Hosted;
@@ -15,6 +16,7 @@ namespace ElectronicVoting.Infrastructure
             services.AddHostedService<QueuedHostedService>();  
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
             
+            services.AddScoped<IPollService, PollService>();
             services.AddScoped<IPbftConsensusService,PbftConsensusService>();
             services.AddScoped<IRepositoryEntities<ValidatorEntities>,RepositoryEntities<ValidatorEntities>>();
             services.AddScoped<IRepositoryEntities<TransactionEntities>, RepositoryEntities<TransactionEntities>>();

@@ -7,7 +7,7 @@ namespace ElectronicVoting.Common.Interface
 {
     public interface IPbftConsensusService
     {
-        public Task PrePreparingAsync(HttpContext httpContext,MessageTransaction messageTransaction,CancellationToken token);
+        public Task PrePreparingAsync(HttpContext httpContext,MessageVote messageVote,CancellationToken token);
         public Task PreparingAsync(HttpContext httpContext,MessageTransaction messageTransaction,CancellationToken token);
         public Task CommitAsync(HttpContext httpContext, MessageVerificationVote messageVerificationVote, CancellationToken token);
     }
