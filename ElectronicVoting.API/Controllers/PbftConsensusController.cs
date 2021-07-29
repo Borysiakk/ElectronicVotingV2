@@ -25,6 +25,7 @@ namespace ElectronicVoting.API.Controllers
         [HttpPost("PrePreparing")]
         public async Task<IActionResult> PrePreparing(MessageVote messageVote)
         {
+            int port = HttpContext.Connection.LocalPort;
             _queue.QueueBackgroundWorkItem(async token =>
             {
                 using (var scope = _serviceScopeFactory.CreateScope())

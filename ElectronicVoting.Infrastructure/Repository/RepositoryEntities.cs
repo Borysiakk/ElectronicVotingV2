@@ -60,7 +60,10 @@ namespace ElectronicVoting.Infrastructure.Repository
             return entities;
         }
 
-        public async Task<IEnumerable<TA>> GetAllAsync() => await _localDbContext.Set<TA>().ToListAsync();
+        public IEnumerable<TA> GetAllAsync()
+        {
+            return  _localDbContext.Set<TA>().ToList();
+        }
 
         public async Task<IEnumerable<TA>> WhereAsync(Expression<Func<TA, bool>> expression)
         {

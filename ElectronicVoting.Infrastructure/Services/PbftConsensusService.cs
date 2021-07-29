@@ -24,22 +24,25 @@ namespace ElectronicVoting.Infrastructure.Services
             _repositoryElectionSettings = repositoryElectionSettings;
         }
 
+
         public async Task PrePreparingAsync(HttpContext httpContext, MessageVote messageVote, CancellationToken token)
         {
             Console.WriteLine("PrePreparing");
-
+            var port = httpContext.Connection.LocalPort.ToString();
+            
             MessageTransaction messageTransaction = new MessageTransaction()
             {
-                Id = messageVote.Id,
+                Id = Guid.NewGuid().ToString(),
                 Transaction = new Transaction()
                 {
+                    From = port.ToString(),
+                    Vote = messageVote.Vote,
                     Id = Guid.NewGuid().ToString(),
-                    From = "http://localhost" + ":" + httpContext.Connection.LocalPort.ToString(),
-                }
+                },
             };
             
-            var port = httpContext.Connection.LocalPort.ToString();
-            foreach (var validator in await _repositoryValidator.GetAllAsync())
+            
+            foreach (var validator in  _repositoryValidator.GetAllAsync())
             {
                 if (validator.Port != port)
                 {
@@ -53,17 +56,30 @@ namespace ElectronicVoting.Infrastructure.Services
         {
             var port = httpContext.Connection.LocalPort.ToString();
             var resultValidation = await ProofOfKnowledge.Validation(messageTransaction,token);
-
+            var validators =  _repositoryValidator.GetAllAsync();
+            
+            TransactionEntities transactionEntities = new TransactionEntities()
+            {
+                
+                SuperValidator = true,
+                Id = new Guid().ToString(),
+                From = messageTransaction.Transaction.From,
+                TransactionId = messageTransaction.Transaction.Id,
+            };
+            await _repositoryTransaction.AddAsync(transactionEntities);
+            
             if (resultValidation)
             {
                 MessageVerificationVote messageVerificationVote = new MessageVerificationVote()
                 {
+                    
                     IsVerificationVote = true,
                     Id = Guid.NewGuid().ToString(),
                     TransactionId = messageTransaction.Transaction.Id,
                 };
+                
 
-                foreach (var validator in await _repositoryValidator.GetAllAsync())
+                foreach (var validator in validators)
                 {
                     if (port != validator.Port)
                     {

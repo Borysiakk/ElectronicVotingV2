@@ -18,28 +18,16 @@ namespace ElectronicVoting.Infrastructure.Services
             _localDbContext = localDbContext;
         }
 
-        public async Task Vote(HttpContext context,string vote)
+        public async Task Vote(string vote)
         {
-            var port = context.Connection.LocalPort;
-            MessageTransaction voice = new MessageTransaction()
+            MessageVote messageVote = new MessageVote()
             {
-                Id = Guid.NewGuid().ToString(),
-                Transaction = new Transaction()
-                {
-                    Vote = vote,
-                    From = port.ToString(),
-                    Id = Guid.NewGuid().ToString(),
-                },
+                Vote = vote,
+                Id = Guid.NewGuid().ToString()
             };
-                
-            foreach (var validator in _localDbContext.Validators)
-            {
-                if (validator.Port != port.ToString())
-                {
-                    var url = validator.Address + ":" + validator.Port;
-                    var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.PrePreparing, null, voice);
-                }
-            }
+
+            var url = "https://localhost:5001";
+            var result = await HttpHelper.Instance.PostAsync<MessageVote>(url, Routes.PbftConsensusRoutesApi.PrePreparing, null, messageVote);
         }
     }
 }

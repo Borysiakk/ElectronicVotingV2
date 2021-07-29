@@ -5,6 +5,6 @@ namespace ElectronicVoting.Common.Interface.Services
 {
     public interface IPollService
     {
-        public Task Vote(HttpContext context,string vote);
+        public Task Vote(string vote);
     }
 }

@@ -25,7 +25,7 @@ namespace ElectronicVoting.API.Controllers
         [HttpPost("Voice")]
         public async Task<IActionResult> Voice(string value)
         {
-            await _pollService.Vote(HttpContext, value);
+            await _pollService.Vote(value);
             return Ok();
         }
     }
