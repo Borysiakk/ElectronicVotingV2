@@ -1,7 +1,9 @@
 ﻿
 using System.Threading.Tasks;
 using ElectronicVoting.Common.Interface;
+using ElectronicVoting.Common.Model;
 using ElectronicVoting.Common.Model.Blockchain;
+using ElectronicVoting.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,24 +15,26 @@ namespace ElectronicVoting.API.Controllers
     {
         private readonly IBackgroundTaskQueue _queue;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly IPbftConsensusService _pbftConsensusService;
-
-        public PbftConsensusController(IPbftConsensusService pbftConsensusService, IBackgroundTaskQueue queue, IServiceScopeFactory serviceScopeFactory)
+        public PbftConsensusController(IBackgroundTaskQueue queue, IServiceScopeFactory serviceScopeFactory)
         {
             _queue = queue;
             _serviceScopeFactory = serviceScopeFactory;
-            _pbftConsensusService = pbftConsensusService;
         }
 
         [HttpPost("PrePreparing")]
         public async Task<IActionResult> PrePreparing(MessageVote messageVote)
         {
-            int port = HttpContext.Connection.LocalPort;
+            HttpContextInformation httpContextInformation = new HttpContextInformation()
+            {
+                Port = HttpContext.Connection.LocalPort.ToString(),
+            };
+            
             _queue.QueueBackgroundWorkItem(async token =>
             {
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                    await _pbftConsensusService.PrePreparingAsync(HttpContext,messageVote,token);
+                    var _pbftConsensusService = scope.ServiceProvider.GetService<IPbftConsensusService>();
+                    await _pbftConsensusService.PrePreparingAsync(httpContextInformation,messageVote,token);   
                 }
             });
             
@@ -40,11 +44,17 @@ namespace ElectronicVoting.API.Controllers
         [HttpPost("Preparing")]
         public async Task<IActionResult> Preparing(MessageTransaction messageTransaction)
         {
+            HttpContextInformation httpContextInformation = new HttpContextInformation()
+            {
+                Port = HttpContext.Connection.LocalPort.ToString(),
+            };
+            
             _queue.QueueBackgroundWorkItem(async token =>
             {
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                    await _pbftConsensusService.PreparingAsync(HttpContext,messageTransaction,token);   
+                    var _pbftConsensusService = scope.ServiceProvider.GetService<IPbftConsensusService>();
+                    await _pbftConsensusService.PreparingAsync(httpContextInformation,messageTransaction,token);   
                 }
             });
             
@@ -54,11 +64,17 @@ namespace ElectronicVoting.API.Controllers
         [HttpPost("Commit")]
         public async Task<IActionResult> Commit(MessageVerificationVote messageVerificationVote)
         {
+            HttpContextInformation httpContextInformation = new HttpContextInformation()
+            {
+                Port = HttpContext.Connection.LocalPort.ToString(),
+            };
+            
             _queue.QueueBackgroundWorkItem(async token =>
             {
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                    await _pbftConsensusService.CommitAsync(HttpContext,messageVerificationVote,token);   
+                    var _pbftConsensusService = scope.ServiceProvider.GetService<IPbftConsensusService>();
+                    await _pbftConsensusService.CommitAsync(httpContextInformation,messageVerificationVote,token);   
                 }
             });
             return Ok("Commit");

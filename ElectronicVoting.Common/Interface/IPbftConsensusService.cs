@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using ElectronicVoting.Common.Model;
 using Microsoft.AspNetCore.Http;
 using ElectronicVoting.Common.Model.Blockchain;
 
@@ -7,8 +8,8 @@ namespace ElectronicVoting.Common.Interface
 {
     public interface IPbftConsensusService
     {
-        public Task PrePreparingAsync(HttpContext httpContext,MessageVote messageVote,CancellationToken token);
-        public Task PreparingAsync(HttpContext httpContext,MessageTransaction messageTransaction,CancellationToken token);
-        public Task CommitAsync(HttpContext httpContext, MessageVerificationVote messageVerificationVote, CancellationToken token);
+        public Task PrePreparingAsync(HttpContextInformation httpContextInformation,MessageVote messageVote,CancellationToken token);
+        public Task PreparingAsync(HttpContextInformation httpContextInformation,MessageTransaction messageTransaction,CancellationToken token);
+        public Task CommitAsync(HttpContextInformation httpContextInformation, MessageVerificationVote messageVerificationVote, CancellationToken token);
     }
 }

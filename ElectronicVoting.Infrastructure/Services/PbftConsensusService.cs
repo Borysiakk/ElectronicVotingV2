@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ElectronicVoting.Common;
 using ElectronicVoting.Common.Interface;
+using ElectronicVoting.Common.Model;
 using ElectronicVoting.Common.Model.Blockchain;
 using ElectronicVoting.Common.Model.Entities;
 using ElectronicVoting.Infrastructure.Helper;
@@ -25,10 +26,10 @@ namespace ElectronicVoting.Infrastructure.Services
         }
 
 
-        public async Task PrePreparingAsync(HttpContext httpContext, MessageVote messageVote, CancellationToken token)
+        public async Task PrePreparingAsync(HttpContextInformation httpContextInformation, MessageVote messageVote, CancellationToken token)
         {
             Console.WriteLine("PrePreparing");
-            var port = httpContext.Connection.LocalPort.ToString();
+            var port = httpContextInformation.Port;
             
             MessageTransaction messageTransaction = new MessageTransaction()
             {
@@ -47,14 +48,14 @@ namespace ElectronicVoting.Infrastructure.Services
                 if (validator.Port != port)
                 {
                     var url = validator.Address + ":" + validator.Port;
-                    var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.Preparing, null, messageTransaction);
+                    //var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.Preparing, null, messageTransaction);
                 }
             }
         }
 
-        public async Task PreparingAsync(HttpContext httpContext, MessageTransaction messageTransaction,CancellationToken token)
+        public async Task PreparingAsync(HttpContextInformation httpContextInformation, MessageTransaction messageTransaction,CancellationToken token)
         {
-            var port = httpContext.Connection.LocalPort.ToString();
+            var port = httpContextInformation.Port;
             var resultValidation = await ProofOfKnowledge.Validation(messageTransaction,token);
             var validators =  _repositoryValidator.GetAllAsync();
             
@@ -91,7 +92,7 @@ namespace ElectronicVoting.Infrastructure.Services
             Console.WriteLine("Preparing");
         }
 
-        public async Task CommitAsync(HttpContext httpContext, MessageVerificationVote messageVerificationVote, CancellationToken token)
+        public async Task CommitAsync(HttpContextInformation httpContextInformation, MessageVerificationVote messageVerificationVote, CancellationToken token)
         {
             var countVerificationServer = (await _repositoryElectionSettings.FindAsync("0")).VerificationServerCount;
             TransactionEntities transactionEntities = new TransactionEntities()
