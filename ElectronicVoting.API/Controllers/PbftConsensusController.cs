@@ -73,7 +73,6 @@ namespace ElectronicVoting.API.Controllers
             {
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                    
                     var _pbftConsensusService = scope.ServiceProvider.GetService<IPbftConsensusService>();
                     await _pbftConsensusService.CommitAsync(httpContextInformation,messageVerificationVote,token);   
                 }

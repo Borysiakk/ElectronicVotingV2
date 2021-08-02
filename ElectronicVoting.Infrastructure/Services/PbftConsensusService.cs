@@ -48,7 +48,7 @@ namespace ElectronicVoting.Infrastructure.Services
                 if (validator.Port != port)
                 {
                     var url = validator.Address + ":" + validator.Port;
-                    //var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.Preparing, null, messageTransaction);
+                    var result = await HttpHelper.Instance.PostAsync<MessageTransaction>(url, Routes.PbftConsensusRoutesApi.Preparing, null, messageTransaction);
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace ElectronicVoting.Infrastructure.Services
             {
                 
                 SuperValidator = true,
-                Id = new Guid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 From = messageTransaction.Transaction.From,
                 TransactionId = messageTransaction.Transaction.Id,
             };
@@ -101,6 +101,7 @@ namespace ElectronicVoting.Infrastructure.Services
                 From = messageVerificationVote.From,
                 TransactionId = messageVerificationVote.TransactionId,
             };
+            
             await _repositoryTransaction.AddAsync(transactionEntities);
             var transactionsCount = (await _repositoryTransaction.WhereAsync(a => a.TransactionId == transactionEntities.TransactionId)).Count();
             int expression = (countVerificationServer * 2) / 3;

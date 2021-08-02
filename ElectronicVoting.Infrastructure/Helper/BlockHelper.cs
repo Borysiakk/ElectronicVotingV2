@@ -1,8 +1,9 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using ElectronicVoting.Common.Model.Blockchain;
 using Newtonsoft.Json;
 
-namespace ElectronicVoting.API.Consensus.Helper
+namespace ElectronicVoting.Infrastructure.Helper
 {
     public class BlockHelper
     {
